@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>For You My Love 💌</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #F8D7DA );
+            overflow: hidden;
+        }
+
+        .container {
+            text-align: center;
+        }
+
+        h1 {
+            color: white;
+            margin-bottom: 35px;
+        }
+
+        /* ENVELOPE */
+
+        .envelope {
+            width: 330px;
+            height: 220px;
+            position: relative;
+            cursor: pointer;
+
+            transform-origin: center center;
+
+            transition:
+                transform 1.8s cubic-bezier(.65,0,.35,1),
+                opacity 1.8s ease;
+        }
+
+        .envelope-body {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 15px 30px rgba(0,0,0,.25);
+            overflow: hidden;
+            z-index: 2;
+        }
+
+        .envelope-body::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: 0;
+
+            border-left: 165px solid #f8d7da;
+            border-top: 110px solid transparent;
+
+            z-index: 4;
+        }
+
+        .envelope-body::after {
+            content: "";
+            position: absolute;
+            right: 0;
+            bottom: 0;
+
+            border-right: 165px solid #f8d7da;
+            border-top: 110px solid transparent;
+
+            z-index: 4;
+        }
+
+        
+
+        .letter {
+            position: absolute;
+
+            width: 260px;
+            height: 180px;
+
+            left: 35px;
+            top: 25px;
+
+            background: white;
+            border-radius: 5px;
+
+            padding: 20px;
+
+            z-index: 3;
+
+            box-shadow: 0 5px 15px rgba(0,0,0,.15);
+
+            transition:
+                top 1.2s cubic-bezier(.65,0,.35,1),
+                transform 1.2s ease;
+        }
+
+        .letter h2 {
+            color: #ff4f81;
+        }
+
+        .letter p {
+            color: #777;
+        }
+
+        .flap {
+            position: absolute;
+
+            top: 0;
+            left: 0;
+
+            width: 0;
+            height: 0;
+
+            border-left: 165px solid transparent;
+            border-right: 165px solid transparent;
+            border-top: 120px solid #ff6f91;
+
+            transform-origin: top center;
+
+            transition:
+                transform 1.2s cubic-bezier(.65,0,.35,1);
+
+            z-index: 6;
+        }
+
+        .heart {
+            position: absolute;
+
+            top: 88px;
+            left: 50%;
+
+            transform: translateX(-50%);
+
+            font-size: 45px;
+
+            z-index: 10;
+
+            transition:
+                transform .6s ease,
+                opacity .6s ease;
+        }
+
+        .text {
+            margin-top: 30px;
+            color: white;
+            font-size: 17px;
+
+            transition: opacity .5s ease;
+        }
+        .open .flap {
+            transform: rotateX(180deg);
+        }
+
+        .open .letter {
+            top: -110px;
+            transform: scale(1.05);
+        }
+
+        .open .heart {
+            opacity: 0;
+            transform: translateX(-50%) scale(0);
+        }
+
+        .zoom {
+            transform: scale(8);
+            opacity: 0;
+        }
+
+        .hide-text {
+            opacity: 0;
+        }
+
+
+        .heart-float {
+            position: absolute;
+            font-size: 25px;
+
+            animation: float 4s infinite ease-in-out;
+        }
+
+        .one {
+            left: 10%;
+            top: 20%;
+        }
+
+        .two {
+            right: 10%;
+            top: 30%;
+            animation-delay: 1s;
+        }
+
+        .three {
+            left: 20%;
+            bottom: 15%;
+            animation-delay: 2s;
+        }
+
+        .four {
+            right: 20%;
+            bottom: 20%;
+            animation-delay: 3s;
+        }
+
+        @keyframes float {
+
+            0%, 100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-25px);
+            }
+
+        }
+
+
+        .fade-screen {
+            position: fixed;
+
+            inset: 0;
+
+            background: lightblue;
+
+            opacity: 0;
+
+            pointer-events: none;
+
+            z-index: 100;
+
+            transition: opacity 1s ease;
+        }
+
+        .fade-screen.active {
+            opacity: 1;
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <div class="heart-float one">💗</div>
+
+    <div class="heart-float three">💖</div>
+    <div class="cake">💗</div>
+
+
+    <div class="container" id="container">
+
+        <h1>
+            Pendutin mu ⬇️⬇️
+        </h1>
+
+        <div
+            class="envelope"
+            id="envelope"
+            onclick="openEnvelope()"
+        >
+
+            <div class="envelope-body">
+
+                <div class="letter">
+
+                    <h2>
+                    
+                    </h2>
+
+                    <p>
+                    
+                    </p>
+
+                    <p>
+                    
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="flap"></div>
+
+
+            <div class="heart">
+                ❤️
+            </div>
+
+        </div>
+
+
+        <div class="text" id="text">
+            Click the heart to open 💕
+        </div>
+
+    </div>
+
+    <div class="fade-screen" id="fadeScreen"></div>
+
+
+    <script>
+
+        let opened = false;
+
+        function openEnvelope() {
+
+            if (opened) return;
+
+            opened = true;
+
+            let envelope =
+                document.getElementById("envelope");
+
+            let text =
+                document.getElementById("text");
+
+            let fade =
+                document.getElementById("fadeScreen");
+
+            envelope.classList.add("open");
+
+            text.classList.add("hide-text");
+
+            setTimeout(function() {
+
+                envelope.classList.add("zoom");
+
+            }, 1300);
+
+
+            setTimeout(function() {
+
+                fade.classList.add("active");
+
+            }, 1700);
+
+            setTimeout(function() {
+
+                window.location.href =
+                    "promise.html";
+
+            }, 2600);
+
+        }
+
+    </script>
+
+</body>
+</html>
